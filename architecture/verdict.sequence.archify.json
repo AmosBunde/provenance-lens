@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Single-Asset Verdict",
+    "subtitle": "From raw asset to a grounded trustworthiness verdict",
+    "output": "architecture/verdict-sequence.html",
+    "viewBox": [
+      860,
+      780
+    ],
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "measure",
+        "label": "Measure",
+        "focus": [
+          "caller",
+          "forensics",
+          "store"
+        ],
+        "note": "Classical CV extracts forensic signals once, keyed by the asset hash."
+      },
+      {
+        "id": "reason",
+        "label": "Reason",
+        "focus": [
+          "prompt",
+          "store",
+          "vlm"
+        ],
+        "note": "The template renders measurements as structured context beside the image."
+      },
+      {
+        "id": "ground",
+        "label": "Ground and answer",
+        "focus": [
+          "vlm",
+          "parser",
+          "store",
+          "caller"
+        ],
+        "note": "Strict parsing plus a feature-store existence check gate every verdict."
+      }
+    ]
+  },
+  "participants": [
+    {
+      "id": "caller",
+      "type": "external",
+      "label": "Caller",
+      "sublabel": "eval harness or demo"
+    },
+    {
+      "id": "forensics",
+      "type": "backend",
+      "label": "Forensics",
+      "sublabel": "signal extractors"
+    },
+    {
+      "id": "store",
+      "type": "database",
+      "label": "Feature store",
+      "sublabel": "parquet by hash"
+    },
+    {
+      "id": "prompt",
+      "type": "backend",
+      "label": "Prompt",
+      "sublabel": "template"
+    },
+    {
+      "id": "vlm",
+      "type": "cloud",
+      "label": "VLM",
+      "sublabel": "API or local"
+    },
+    {
+      "id": "parser",
+      "type": "security",
+      "label": "Parser",
+      "sublabel": "JSON + grounding"
+    }
+  ],
+  "segments": [
+    {
+      "from": 150,
+      "to": 280,
+      "label": "Measure"
+    },
+    {
+      "from": 300,
+      "to": 480,
+      "label": "Reason"
+    },
+    {
+      "from": 500,
+      "to": 700,
+      "label": "Ground and answer"
+    }
+  ],
+  "messages": [
+    {
+      "id": "submit-asset",
+      "from": "caller",
+      "to": "forensics",
+      "y": 185,
+      "label": "asset (image or frames)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "write-signals",
+      "from": "forensics",
+      "to": "store",
+      "y": 230,
+      "label": "write signals by asset hash"
+    },
+    {
+      "id": "request-verdict",
+      "from": "caller",
+      "to": "prompt",
+      "y": 320,
+      "label": "request verdict",
+      "variant": "emphasis"
+    },
+    {
+      "id": "read-signals",
+      "from": "prompt",
+      "to": "store",
+      "y": 360,
+      "label": "read signals for hash"
+    },
+    {
+      "id": "measurements",
+      "from": "store",
+      "to": "prompt",
+      "y": 395,
+      "label": "measurements",
+      "variant": "return"
+    },
+    {
+      "id": "image-context",
+      "from": "prompt",
+      "to": "vlm",
+      "y": 440,
+      "label": "image + structured context",
+      "variant": "emphasis"
+    },
+    {
+      "id": "raw-output",
+      "from": "vlm",
+      "to": "parser",
+      "y": 520,
+      "label": "raw model output"
+    },
+    {
+      "id": "verify-citations",
+      "from": "parser",
+      "to": "store",
+      "y": 565,
+      "label": "do cited (signal, region) pairs exist?",
+      "variant": "security"
+    },
+    {
+      "id": "grounding-result",
+      "from": "store",
+      "to": "parser",
+      "y": 600,
+      "label": "grounding result",
+      "variant": "return"
+    },
+    {
+      "id": "verdict",
+      "from": "parser",
+      "to": "caller",
+      "y": 660,
+      "label": "{label, confidence, evidence[]}",
+      "variant": "return",
+      "note": "free-text drift or one ungrounded citation scores as a parse failure"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "forensics",
+      "from": 180,
+      "to": 240,
+      "type": "backend"
+    },
+    {
+      "participant": "prompt",
+      "from": 315,
+      "to": 450,
+      "type": "backend"
+    },
+    {
+      "participant": "vlm",
+      "from": 435,
+      "to": 528,
+      "type": "cloud"
+    },
+    {
+      "participant": "parser",
+      "from": 515,
+      "to": 668,
+      "type": "security"
+    },
+    {
+      "participant": "store",
+      "from": 560,
+      "to": 606,
+      "type": "database"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Measure once",
+      "items": [
+        "Signals are deterministic classical CV",
+        "The asset SHA-256 keys everything downstream"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Reason",
+      "items": [
+        "The template only renders signal names that exist in the store",
+        "One interface hides the API versus local backend choice"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Gate",
+      "items": [
+        "Strict JSON schema, no repair beyond stripping one code fence",
+        "Ungrounded evidence fails the whole response",
+        "Grounding rate is a headline metric"
+      ]
+    }
+  ]
+}

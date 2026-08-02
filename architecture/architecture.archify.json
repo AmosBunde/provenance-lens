@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Provenance Lens",
+    "subtitle": "Multimodal authenticity reasoner: forensic signals, VLM reasoning, frozen benchmark",
+    "output": "architecture/architecture.html",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1620,
+      620
+    ],
+    "views": [
+      {
+        "id": "verdict-path",
+        "label": "Verdict path",
+        "focus": [
+          "assets",
+          "forensics",
+          "store",
+          "prompt",
+          "vlm",
+          "parser"
+        ],
+        "note": "Signals are measured once, rendered as structured context, and reasoned over by the VLM."
+      },
+      {
+        "id": "test-protection",
+        "label": "Test split protection",
+        "focus": [
+          "splits",
+          "harness",
+          "report"
+        ],
+        "note": "The frozen test split is readable by the eval harness alone; its manifest hash is committed."
+      },
+      {
+        "id": "baseline-path",
+        "label": "Baseline competitor",
+        "focus": [
+          "store",
+          "baseline",
+          "harness"
+        ],
+        "note": "A tuned classifier over embeddings plus structured features sets the number to beat."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "assets",
+      "type": "external",
+      "label": "Raw assets",
+      "sublabel": "images \u00b7 short video",
+      "pos": [
+        40,
+        110
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "forensics",
+      "type": "backend",
+      "label": "Forensics engine",
+      "sublabel": "compression \u00b7 noise \u00b7 edges \u00b7 lighting",
+      "pos": [
+        290,
+        110
+      ],
+      "size": [
+        160,
+        72
+      ]
+    },
+    {
+      "id": "store",
+      "type": "database",
+      "label": "Feature store",
+      "sublabel": "parquet, keyed by asset hash",
+      "pos": [
+        560,
+        114
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "prompt",
+      "type": "backend",
+      "label": "Prompt template",
+      "sublabel": "structured measurements",
+      "pos": [
+        830,
+        114
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "vlm",
+      "type": "cloud",
+      "label": "VLM backend",
+      "sublabel": "API or local open weights",
+      "pos": [
+        1100,
+        114
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "parser",
+      "type": "security",
+      "label": "Parser + grounding",
+      "sublabel": "strict JSON, cited signals must exist",
+      "pos": [
+        1370,
+        110
+      ],
+      "size": [
+        160,
+        72
+      ]
+    },
+    {
+      "id": "manifest",
+      "type": "backend",
+      "label": "Manifest builder",
+      "sublabel": "SHA-256 \u00b7 dedupe \u00b7 license",
+      "pos": [
+        40,
+        280
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "splits",
+      "type": "database",
+      "label": "Frozen splits",
+      "sublabel": "test hash committed",
+      "pos": [
+        40,
+        450
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "scene-aware"
+    },
+    {
+      "id": "baseline",
+      "type": "backend",
+      "label": "Baseline classifier",
+      "sublabel": "frozen backbone + tuned head",
+      "pos": [
+        560,
+        300
+      ],
+      "size": [
+        160,
+        72
+      ],
+      "tag": "train + val only"
+    },
+    {
+      "id": "harness",
+      "type": "security",
+      "label": "Eval harness",
+      "sublabel": "bootstrap CIs \u00b7 calibration",
+      "pos": [
+        830,
+        300
+      ],
+      "size": [
+        170,
+        72
+      ],
+      "tag": "sole test reader"
+    },
+    {
+      "id": "report",
+      "type": "frontend",
+      "label": "Report",
+      "sublabel": "docs/report/",
+      "pos": [
+        1110,
+        304
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "demo",
+      "type": "frontend",
+      "label": "Demo",
+      "sublabel": "FastAPI /verdict + page",
+      "pos": [
+        1370,
+        304
+      ],
+      "size": [
+        160,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "VLM reasoner",
+      "wraps": [
+        "prompt",
+        "vlm",
+        "parser"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "extract-signals",
+      "from": "assets",
+      "to": "forensics"
+    },
+    {
+      "id": "hash-and-license",
+      "from": "assets",
+      "to": "manifest",
+      "label": "hash + license",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "scene-split",
+      "from": "manifest",
+      "to": "splits",
+      "label": "scene-aware split",
+      "labelAt": [
+        120,
+        358
+      ]
+    },
+    {
+      "id": "write-signals",
+      "from": "forensics",
+      "to": "store",
+      "label": "signals by hash"
+    },
+    {
+      "id": "measurements",
+      "from": "store",
+      "to": "prompt",
+      "label": "measurements"
+    },
+    {
+      "id": "image-context",
+      "from": "prompt",
+      "to": "vlm",
+      "label": "image + context",
+      "variant": "emphasis"
+    },
+    {
+      "id": "raw-output",
+      "from": "vlm",
+      "to": "parser",
+      "label": "raw output"
+    },
+    {
+      "id": "structured-features",
+      "from": "store",
+      "to": "baseline",
+      "label": "structured features",
+      "labelAt": [
+        640,
+        192
+      ]
+    },
+    {
+      "id": "test-harness-only",
+      "from": "splits",
+      "to": "harness",
+      "label": "test \u00b7 harness only",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "bottom",
+      "via": [
+        [
+          915,
+          482
+        ]
+      ]
+    },
+    {
+      "id": "baseline-score",
+      "from": "baseline",
+      "to": "harness",
+      "label": "baseline score"
+    },
+    {
+      "id": "verdict-evidence",
+      "from": "parser",
+      "to": "harness",
+      "label": "verdict + evidence",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "verdict-json",
+      "from": "parser",
+      "to": "demo",
+      "label": "verdict JSON",
+      "variant": "dashed",
+      "labelDx": 45,
+      "labelDy": 40
+    },
+    {
+      "id": "report-out",
+      "from": "harness",
+      "to": "report"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Data discipline",
+      "items": [
+        "Test manifest SHA-256 is committed at split time",
+        "Scene clusters never straddle splits",
+        "Only the eval harness can read the test split, enforced by a unit test"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Grounded evidence",
+      "items": [
+        "Every cited (signal, region) pair must exist in the feature store",
+        "An ungrounded citation scores the whole response as a parse failure"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "A fair fight",
+      "items": [
+        "The baseline is tuned with a sweep and early stopping",
+        "It is scored on the test split exactly once",
+        "Baseline versus reasoner uses a paired bootstrap"
+      ]
+    }
+  ]
+}

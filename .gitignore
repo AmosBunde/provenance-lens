@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Data payloads are never committed; split hashes are
+data/*
+!data/splits/
+data/splits/*
+!data/splits/*.sha256
+
+# Experiment runs and model artifacts
+runs/
+checkpoints/
+*.ckpt
+*.pt
+
+# Generated report is committed only via make eval PRs
+docs/report/.cache/
+
+# OS
+.DS_Store
