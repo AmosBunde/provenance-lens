@@ -1,0 +1,20 @@
+# CUDA image: full-scale training and reasoning on a rented GPU.
+FROM nvidia/cuda:12.6.3-runtime-ubuntu24.04
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv "$VIRTUAL_ENV"
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+WORKDIR /app
+COPY pyproject.toml README.md LICENSE ./
+COPY src ./src
+RUN pip install --no-cache-dir .
+
+# Smoke check: the package must import inside the image.
+RUN python -c "import provenance_lens; print('provenance-lens', provenance_lens.__version__)"
+
+CMD ["python", "-c", "import provenance_lens; print(provenance_lens.__version__)"]

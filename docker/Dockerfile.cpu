@@ -1,0 +1,12 @@
+# CPU image: development and smoke-scale stages.
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY pyproject.toml README.md LICENSE ./
+COPY src ./src
+RUN pip install --no-cache-dir .
+
+# Smoke check: the package must import inside the image.
+RUN python -c "import provenance_lens; print('provenance-lens', provenance_lens.__version__)"
+
+CMD ["python", "-c", "import provenance_lens; print(provenance_lens.__version__)"]
