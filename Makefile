@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help setup lint test data features eda
+.PHONY: help setup lint test data features eda baseline-smoke
 
 help: ## List the available targets
 	@grep -E "^[a-z-]+:.*##" $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*##"}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -19,6 +19,9 @@ features: ## Run all forensic extractors into the parquet feature store
 eda: ## Execute the EDA notebook headlessly into docs/report/eda/
 	mkdir -p docs/report/eda
 	papermill notebooks/eda.ipynb docs/report/eda/eda_executed.ipynb --kernel python3
+
+baseline-smoke: ## CPU smoke run of the full baseline path (tiny subset)
+	python3 -m provenance_lens.baseline.train --smoke
 
 lint: ## Run ruff and black in check mode
 	ruff check src tests
