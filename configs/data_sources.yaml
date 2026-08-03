@@ -1,0 +1,68 @@
+# Dataset sources. Every asset in the corpus enters through this file.
+#
+# Fields per source:
+#   name:     directory name under data/raw/
+#   kind:     archive (zip) or hf_parquet (parquet with embedded images)
+#   urls:     one or more files to fetch; each carries its own sha256
+#   license:  license string recorded for every asset of the source
+#   classes:  class labels this source contributes
+#   enabled:  disabled sources are skipped (credential-gated, kept for the record)
+#   notes:    selection rationale and caveats
+#
+# Checksums are pinned from reference downloads on 2026-08-03; a mismatch
+# at download time fails the stage loudly.
+
+sources:
+  - name: micc_f220
+    kind: archive
+    enabled: true
+    license: "MICC research-only license (Amerini et al., IEEE TIFS 2011)"
+    classes: [authentic, copy_move]
+    urls:
+      - url: "http://lci.micc.unifi.it/labd/cmfd/MICC-F220.zip"
+        sha256: "96d8dc06996452a36028ecf0569407d5206cfbe5f52591247380424c17c084b6"
+    notes: >-
+      220 images (110 tampered by copy-move, 110 originals) from MICC,
+      University of Florence. Direct credential-free download; plain http
+      is all the host offers, which the pinned checksum compensates for.
+      Small enough to double as the CPU smoke corpus.
+
+  - name: micc_f2000
+    kind: archive
+    enabled: true
+    license: "MICC research-only license (Amerini et al., IEEE TIFS 2011)"
+    classes: [authentic, copy_move]
+    urls:
+      - url: "http://lci.micc.unifi.it/labd/cmfd/MICC-F2000.zip"
+        sha256: "f403295129387e90b40b62490c69dfde176454c5841252b1e9fd2e5b04aafa24"
+    notes: >-
+      2000 images (700 copy-move tampered, 1300 originals), same host and
+      license as micc_f220. Provides scale for training splits.
+
+  - name: cifake
+    kind: hf_parquet
+    enabled: true
+    license: "MIT (CIFAKE, Bird and Lotfi 2024; real side derives from CIFAR-10)"
+    classes: [authentic, ai_generated]
+    urls:
+      - url: "https://huggingface.co/datasets/dragonintelligence/CIFAKE-image-dataset/resolve/main/data/train-00000-of-00001.parquet"
+        sha256: "c906031ad6ac44c7d0fc21e8f9315d85cf351540b6517bd6c0de3ee2f884021b"
+      - url: "https://huggingface.co/datasets/dragonintelligence/CIFAKE-image-dataset/resolve/main/data/test-00000-of-00001.parquet"
+        sha256: "7767d5285d009471175ac7985c60367d82a34088f29c67185da7af2c53b7975d"
+    notes: >-
+      120k 32x32 images, half real (CIFAR-10), half Stable Diffusion 1.4
+      generations. Credential-free Hugging Face mirror; images are embedded
+      in parquet and materialized to PNG files at extraction time. Low
+      resolution is a known limitation recorded for the EDA artifact audit.
+
+  - name: casia_v2
+    kind: archive
+    enabled: false
+    license: "CASIA v2.0 research license (Institute of Automation, CAS)"
+    classes: [authentic, splice, copy_move]
+    urls: []
+    notes: >-
+      The canonical splice corpus. Every known image mirror is credential
+      gated (Kaggle) or unverifiable, so the source is recorded but
+      disabled; enabling it requires supplying a URL and checksum for a
+      licensed copy. The splicing class gap is tracked in the M1 review.

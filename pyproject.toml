@@ -10,7 +10,12 @@ readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Amos Bunde" }]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "pyyaml>=6.0",
+    "pandas>=2.0",
+    "pyarrow>=15.0",
+    "pillow>=10.0",
+]
 
 [project.optional-dependencies]
 dev = [
