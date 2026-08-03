@@ -11,6 +11,7 @@ setup: ## Install the package with dev tooling and the pre-commit hooks
 data: ## Download and verify sources, then build the deduplicated manifest
 	python3 -m provenance_lens.data.download configs/data_sources.yaml data/raw
 	python3 -m provenance_lens.data.manifest
+	python3 -m provenance_lens.data.splits
 
 lint: ## Run ruff and black in check mode
 	ruff check src tests
