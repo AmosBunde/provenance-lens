@@ -41,10 +41,10 @@ M0 was executed before this plan was adopted and landed as five infrastructure p
 
 | Plan # | Issue title | Labels | Branch | PR deliverable | Depends on | Real issue |
 |---|---|---|---|---|---|---|
-| 14 | Frozen backbone embedding extraction pipeline | phase:baseline, type:feat | feat/N-backbone-embeddings | Cached embeddings for all assets, CPU smoke path | 13 | |
-| 15 | Detection head model and training loop in PyTorch | phase:baseline, type:feat | feat/N-detection-head | Trainable head over embedding plus structured features, val metrics logged | 14 | |
-| 16 | Hyperparameter sweep, early stopping, checkpoint freezing | phase:baseline, type:exp | exp/N-baseline-sweep | Sweep log, frozen best checkpoint, val curve plots | 15 | |
-| 17 | Single-shot test scoring: record the number to beat | phase:baseline, type:exp | exp/N-number-to-beat | One test run, score committed to the results table, protocol note that the test set is now closed to the baseline | 16 | |
+| 14 | Frozen backbone embedding extraction pipeline | phase:baseline, type:feat | feat/35-backbone-embeddings | Cached embeddings for all assets, CPU smoke path | 13 | #35 |
+| 15 | Detection head model and training loop in PyTorch | phase:baseline, type:feat | feat/36-detection-head | Trainable head over embedding plus structured features, val metrics logged | 14 | #36 |
+| 16 | Hyperparameter sweep, early stopping, checkpoint freezing | phase:baseline, type:exp | exp/37-baseline-sweep | Sweep log, frozen best checkpoint, val curve plots | 15 | #37 |
+| 17 | Single-shot test scoring: record the number to beat | phase:baseline, type:exp | exp/38-number-to-beat | One test run, score committed to the results table, protocol note that the test set is now closed to the baseline | 16 | #38 |
 
 ## M4: VLM reasoning layer (5 PRs)
 
