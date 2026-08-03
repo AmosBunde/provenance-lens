@@ -8,8 +8,9 @@ setup: ## Install the package with dev tooling and the pre-commit hooks
 	python3 -m pip install -e ".[dev]"
 	@if [ -f .pre-commit-config.yaml ]; then pre-commit install; fi
 
-data: ## Download configured sources, verify checksums, extract to data/raw
+data: ## Download and verify sources, then build the deduplicated manifest
 	python3 -m provenance_lens.data.download configs/data_sources.yaml data/raw
+	python3 -m provenance_lens.data.manifest
 
 lint: ## Run ruff and black in check mode
 	ruff check src tests
