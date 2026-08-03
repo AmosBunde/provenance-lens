@@ -10,12 +10,12 @@ gh label create "type:feat"      --color 0e8a16 --description "New capability"
 gh label create "type:exp"       --color d93f0b --description "Experiment with measured result"
 gh label create "type:fix"       --color b60205 --description "Defect repair"
 gh label create "type:docs"      --color 0075ca --description "Documentation and report"
-gh label create "area:data"      --color c2e0c6 --description "Manifest, splits, EDA"
-gh label create "area:forensics" --color fef2c0 --description "Signal extractors, feature store"
-gh label create "area:baseline"  --color bfd4f2 --description "Classifier baseline"
-gh label create "area:reasoner"  --color d4c5f9 --description "VLM prompt, parser, grounding"
-gh label create "area:eval"      --color f9d0c4 --description "Harness, calibration, report"
-gh label create "area:demo"      --color c5def5 --description "Endpoint and page"
+gh label create "type:research"   --color 1d76db --description "Written findings with measured evidence"
+gh label create "phase:data"      --color c2e0c6 --description "Data pipeline, manifest, splits, EDA"
+gh label create "phase:forensics" --color fef2c0 --description "Signal extractors, feature store"
+gh label create "phase:baseline"  --color bfd4f2 --description "Classifier baseline"
+gh label create "phase:reasoner"  --color d4c5f9 --description "VLM prompt, parser, grounding"
+gh label create "phase:eval"      --color f9d0c4 --description "Harness, calibration, video, report"
 
 for m in "M0 Scaffold" "M1 Data and EDA" "M2 Forensics" "M3 Baseline" "M4 Reasoner" "M5 Eval, calibration, video"; do
   gh api "repos/AmosBunde/provenance-lens/milestones" -f title="$m"
@@ -24,7 +24,7 @@ done
 
 ## Issues
 
-Every task starts as an issue with four sections: Problem, Proposal, Acceptance criteria, Out of scope. Each issue gets one `type:` label, one `area:` label where one applies, and a milestone. A worked example:
+Every task starts as an issue with four sections: Problem, Proposal, Acceptance criteria, Out of scope. Each issue gets one `type:` label, one `phase:` label where one applies, and a milestone. The issue inventory itself is planned in [docs/plan.md](docs/plan.md), which maps planning numbers to real issue numbers and defines the dependency order. (Closed M0 issues carry the retired `area:` labels.) A worked example:
 
 > **Title:** Manifest builder with hashing, dedupe, and license recording
 >
@@ -45,12 +45,14 @@ Every task starts as an issue with four sections: Problem, Proposal, Acceptance 
 
 ## Branches
 
-Branches are created from the issue so the two stay linked:
+Branches are created from the issue so the two stay linked. Branch types are `chore`, `feat`, `exp`, and `fix`:
 
 ```bash
 gh issue develop <n> --name <type>/<n>-<slug> --checkout
 # example: gh issue develop 7 --name feat/7-manifest-builder --checkout
 ```
+
+At most two unmerged branches may be stacked at any time; independent branches off main are not stacked and may run in parallel where docs/plan.md marks them independent.
 
 ## Commits
 
@@ -76,7 +78,9 @@ gh api repos/AmosBunde/provenance-lens/commits/<sha>/comments \
 
 ## Pull requests
 
-The pull request body contains `Closes #<n>` and five sections: Summary, What changed, How it was validated, Risks and follow-ups, Reviewer notes. Experiment pull requests lead with the measured result. A worked example:
+The pull request body contains `Closes #<n>` and five sections: Summary, What changed, How it was validated, Risks and follow-ups, Reviewer notes. Experiment pull requests lead with the measured result.
+
+A pull request targets roughly 150 to 400 reviewable lines, excluding lockfiles, generated plots, and notebook outputs. A branch that grows past the budget is split: close the branch, split the issue in two, open two pull requests. Review runs against the checklists in [docs/plan.md](docs/plan.md): one for infrastructure and feature pull requests, one for experiment pull requests. A worked example:
 
 > Closes #7
 >
