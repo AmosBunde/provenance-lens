@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help setup lint test data eda
+.PHONY: help setup lint test data features eda
 
 help: ## List the available targets
 	@grep -E "^[a-z-]+:.*##" $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*##"}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -12,6 +12,9 @@ data: ## Download and verify sources, then build the deduplicated manifest
 	python3 -m provenance_lens.data.download configs/data_sources.yaml data/raw
 	python3 -m provenance_lens.data.manifest
 	python3 -m provenance_lens.data.splits
+
+features: ## Run all forensic extractors into the parquet feature store
+	python3 -m provenance_lens.forensics.store
 
 eda: ## Execute the EDA notebook headlessly into docs/report/eda/
 	mkdir -p docs/report/eda
