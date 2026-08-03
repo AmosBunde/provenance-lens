@@ -21,11 +21,11 @@ M0 was executed before this plan was adopted and landed as five infrastructure p
 
 | Plan # | Issue title | Labels | Branch | PR deliverable | Depends on | Real issue |
 |---|---|---|---|---|---|---|
-| 4 | Dataset source selection, download scripts, per-asset license manifest | phase:data, type:feat | feat/N-dataset-sources | `make data` downloads and records source plus license per asset | M0 | |
-| 5 | Manifest builder: SHA-256 hashing and near-duplicate detection | phase:data, type:feat | feat/N-manifest-dedupe | Deterministic manifest with dedupe report | 4 | |
-| 6 | Frozen train/val/test split with scene-level leakage guard and committed test hash | phase:data, type:feat | feat/N-frozen-splits | Pure-function splits, committed SHA-256, CI hash verification | 5 | |
-| 7 | Data loader with test-split gating enforced in code | phase:data, type:feat | feat/N-gated-loader | Training imports of the test loader raise; unit test proves it | 6 | |
-| 8 | EDA notebook: class-separating signals and dataset artifact audit | phase:data, type:research | exp/N-eda-artifact-audit | Executed notebook exported to docs/report, written findings on artifact features (resolution, quality factor, camera) | 7 | |
+| 4 | Dataset source selection, download scripts, per-asset license manifest | phase:data, type:feat | feat/15-dataset-sources | `make data` downloads and records source plus license per asset | M0 | #15 |
+| 5 | Manifest builder: SHA-256 hashing and near-duplicate detection | phase:data, type:feat | feat/16-manifest-dedupe | Deterministic manifest with dedupe report | 4 | #16 |
+| 6 | Frozen train/val/test split with scene-level leakage guard and committed test hash | phase:data, type:feat | feat/17-frozen-splits | Pure-function splits, committed SHA-256, CI hash verification | 5 | #17 |
+| 7 | Data loader with test-split gating enforced in code | phase:data, type:feat | feat/18-gated-loader | Training imports of the test loader raise; unit test proves it | 6 | #18 |
+| 8 | EDA notebook: class-separating signals and dataset artifact audit | phase:data, type:research | exp/19-eda-artifact-audit | Executed notebook exported to docs/report, written findings on artifact features (resolution, quality factor, camera) | 7 | #19 |
 
 ## M2: Forensic signal extraction (5 PRs)
 
