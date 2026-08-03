@@ -16,11 +16,16 @@ dependencies = [
     "pyarrow>=15.0",
     "pillow>=10.0",
     "imagehash>=4.3",
+    "scipy>=1.11",
+    "matplotlib>=3.8",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "papermill>=2.5",
+    "ipykernel>=6.29",
+    "nbformat>=5.9",
     "ruff>=0.5",
     "black>=24.0",
     "pre-commit>=3.7",

@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help setup lint test data
+.PHONY: help setup lint test data eda
 
 help: ## List the available targets
 	@grep -E "^[a-z-]+:.*##" $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*##"}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -12,6 +12,10 @@ data: ## Download and verify sources, then build the deduplicated manifest
 	python3 -m provenance_lens.data.download configs/data_sources.yaml data/raw
 	python3 -m provenance_lens.data.manifest
 	python3 -m provenance_lens.data.splits
+
+eda: ## Execute the EDA notebook headlessly into docs/report/eda/
+	mkdir -p docs/report/eda
+	papermill notebooks/eda.ipynb docs/report/eda/eda_executed.ipynb --kernel python3
 
 lint: ## Run ruff and black in check mode
 	ruff check src tests
