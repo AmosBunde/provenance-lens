@@ -15,6 +15,7 @@ dependencies = [
     "pandas>=2.0",
     "pyarrow>=15.0",
     "pillow>=10.0",
+    "imagehash>=4.3",
 ]
 
 [project.optional-dependencies]
