@@ -31,11 +31,11 @@ M0 was executed before this plan was adopted and landed as five infrastructure p
 
 | Plan # | Issue title | Labels | Branch | PR deliverable | Depends on | Real issue |
 |---|---|---|---|---|---|---|
-| 9 | Compression analysis: JPEG ghost detection | phase:forensics, type:feat | feat/N-jpeg-ghosts | Ghost map plus scalar inconsistency score, unit tests on synthetic recompressions | 7 | |
-| 10 | Compression analysis: blocking-artifact grid estimation | phase:forensics, type:feat | feat/N-blocking-grid | Grid alignment score, tests on shifted crops | 9 | |
-| 11 | Noise residuals: high-pass and PRNU-style with cross-region mismatch | phase:forensics, type:feat | feat/N-noise-residuals | Per-region residual statistics and mismatch score | 7 | |
-| 12 | Edge coherence and lighting direction estimators | phase:forensics, type:feat | feat/N-edge-lighting | Both estimators with visual debug output | 7 | |
-| 13 | Parquet feature store keyed by asset hash, wired into make features | phase:forensics, type:feat | feat/N-feature-store | One command computes and stores all signals idempotently | 9, 10, 11, 12 | |
+| 9 | Compression analysis: JPEG ghost detection | phase:forensics, type:feat | feat/25-jpeg-ghosts | Ghost map plus scalar inconsistency score, unit tests on synthetic recompressions | 7 | #25 |
+| 10 | Compression analysis: blocking-artifact grid estimation | phase:forensics, type:feat | feat/26-blocking-grid | Grid alignment score, tests on shifted crops | 9 | #26 |
+| 11 | Noise residuals: high-pass and PRNU-style with cross-region mismatch | phase:forensics, type:feat | feat/27-noise-residuals | Per-region residual statistics and mismatch score | 7 | #27 |
+| 12 | Edge coherence and lighting direction estimators | phase:forensics, type:feat | feat/28-edge-lighting | Both estimators with visual debug output | 7 | #28 |
+| 13 | Parquet feature store keyed by asset hash, wired into make features | phase:forensics, type:feat | feat/29-feature-store | One command computes and stores all signals idempotently | 9, 10, 11, 12 | #29 |
 
 ## M3: Baseline classifier (4 PRs)
 
