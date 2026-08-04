@@ -50,23 +50,23 @@ M0 was executed before this plan was adopted and landed as five infrastructure p
 
 | Plan # | Issue title | Labels | Branch | PR deliverable | Depends on | Real issue |
 |---|---|---|---|---|---|---|
-| 18 | VLM client abstraction with API and local backends | phase:reasoner, type:feat | feat/N-vlm-client | One interface, backend chosen in configs/reasoner.yaml, mocked tests | M0 | |
-| 19 | Prompt template rendering forensic measurements as structured context | phase:reasoner, type:feat | feat/N-signal-prompt | Deterministic rendering from the feature store, golden-file tests | 13, 18 | |
-| 20 | Strict JSON output contract and drift-rejecting parser | phase:reasoner, type:feat | feat/N-json-contract | Schema, parser, failure taxonomy, tests on malformed outputs | 19 | |
-| 21 | Evidence grounding check wired into scoring | phase:reasoner, type:feat | feat/N-grounding-check | Cited signals verified against the feature store, ungrounded citations scored as parse failures | 20 | |
-| 22 | Batch inference over val and test with per-call cost logging | phase:reasoner, type:feat | feat/N-batch-inference | Resumable batch runner, cost report per split | 21 | |
+| 18 | VLM client abstraction with API and local backends | phase:reasoner, type:feat | feat/39-vlm-client | One interface, backend chosen in configs/reasoner.yaml, mocked tests | M0 | #39 |
+| 19 | Prompt template rendering forensic measurements as structured context | phase:reasoner, type:feat | feat/40-signal-prompt | Deterministic rendering from the feature store, golden-file tests | 13, 18 | #40 |
+| 20 | Strict JSON output contract and drift-rejecting parser | phase:reasoner, type:feat | feat/41-json-contract | Schema, parser, failure taxonomy, tests on malformed outputs | 19 | #41 |
+| 21 | Evidence grounding check wired into scoring | phase:reasoner, type:feat | feat/42-grounding-check | Cited signals verified against the feature store, ungrounded citations scored as parse failures | 20 | #42 |
+| 22 | Batch inference over val and test with per-call cost logging | phase:reasoner, type:feat | feat/43-batch-inference | Resumable batch runner, cost report per split | 21 | #43 |
 
 ## M5: Evaluation, calibration, video, demo (7 PRs)
 
 | Plan # | Issue title | Labels | Branch | PR deliverable | Depends on | Real issue |
 |---|---|---|---|---|---|---|
-| 23 | Scorer: accuracy, precision, recall, F1 with bootstrap CIs | phase:eval, type:feat | feat/N-scorer | Scores both tracks from prediction files on the same frozen split | 17, 22 | |
-| 24 | Per-manipulation-type breakdown and confusion matrices | phase:eval, type:feat | feat/N-type-breakdown | Sliced results plus plots | 23 | |
-| 25 | Calibration: reliability diagrams, ECE, temperature scaling on val only | phase:eval, type:feat | feat/N-calibration | Calibration module with the val-only fitting rule enforced in code | 23 | |
-| 26 | Video frame sampler: uniform plus scene-change | phase:eval, type:feat | feat/N-frame-sampler | Sampler with tests on synthetic clips | 7 | |
-| 27 | Temporal consistency scoring and clip-level aggregation | phase:eval, type:feat | feat/N-temporal-consistency | Verdict and signal drift metrics, clip accuracy | 22, 26 | |
-| 28 | Report generator and written findings including failure analysis | phase:eval, type:research | exp/N-results-report | make eval produces docs/report end to end, negative results included | 24, 25, 27 | |
-| 29 | Demo: FastAPI single-asset verdict endpoint and static page | type:infra, type:feat | feat/N-demo-endpoint | make demo serves upload-and-verdict on :8000 | 21 | |
+| 23 | Scorer: accuracy, precision, recall, F1 with bootstrap CIs | phase:eval, type:feat | feat/44-scorer | Scores both tracks from prediction files on the same frozen split | 17, 22 | #44 |
+| 24 | Per-manipulation-type breakdown and confusion matrices | phase:eval, type:feat | feat/45-type-breakdown | Sliced results plus plots | 23 | #45 |
+| 25 | Calibration: reliability diagrams, ECE, temperature scaling on val only | phase:eval, type:feat | feat/46-calibration | Calibration module with the val-only fitting rule enforced in code | 23 | #46 |
+| 26 | Video frame sampler: uniform plus scene-change | phase:eval, type:feat | feat/47-frame-sampler | Sampler with tests on synthetic clips | 7 | #47 |
+| 27 | Temporal consistency scoring and clip-level aggregation | phase:eval, type:feat | feat/48-temporal-consistency | Verdict and signal drift metrics, clip accuracy | 22, 26 | #48 |
+| 28 | Report generator and written findings including failure analysis | phase:eval, type:research | exp/49-results-report | make eval produces docs/report end to end, negative results included | 24, 25, 27 | #49 |
+| 29 | Demo: FastAPI single-asset verdict endpoint and static page | type:infra, type:feat | feat/50-demo-endpoint | make demo serves upload-and-verdict on :8000 | 21 | #50 |
 
 ## Review plan
 
