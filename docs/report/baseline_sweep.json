@@ -1,0 +1,46 @@
+{
+  "winner": {
+    "learning_rate": 0.0003,
+    "run": "sweep-1785803212-lr0.0003",
+    "epoch": 13,
+    "train_loss": 0.012973270078401142,
+    "val_accuracy": 0.9543968526624924,
+    "val_macro_f1": 0.9543967092833091
+  },
+  "all": [
+    {
+      "learning_rate": 0.0003,
+      "run": "sweep-1785803212-lr0.0003",
+      "epoch": 13,
+      "train_loss": 0.012973270078401142,
+      "val_accuracy": 0.9543968526624924,
+      "val_macro_f1": 0.9543967092833091
+    },
+    {
+      "learning_rate": 0.001,
+      "run": "sweep-1785803212-lr0.001",
+      "epoch": 5,
+      "train_loss": 0.039878393231238415,
+      "val_accuracy": 0.9543414417908793,
+      "val_macro_f1": 0.9543414180990233
+    },
+    {
+      "learning_rate": 0.003,
+      "run": "sweep-1785803212-lr0.003",
+      "epoch": 5,
+      "train_loss": 0.048879088921913505,
+      "val_accuracy": 0.9540643874328143,
+      "val_macro_f1": 0.9540643671231774
+    },
+    {
+      "learning_rate": 0.01,
+      "run": "sweep-1785803212-lr0.01",
+      "epoch": 10,
+      "train_loss": 0.062384317830379434,
+      "val_accuracy": 0.9501302155482906,
+      "val_macro_f1": 0.9501284624338113
+    }
+  ],
+  "checkpoint_sha256": "1cebb1f4d0733449a3fe884eebb53f114904a00866bb8b76b9666d51a63a6001",
+  "selection_rule": "max validation macro F1 across the learning rate grid"
+}
