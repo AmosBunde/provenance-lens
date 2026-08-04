@@ -18,3 +18,12 @@ from provenance_lens.data.access import DEFAULT_SPLIT_DIR, HarnessToken, load_sp
 def load_test_split(split_dir: Path = DEFAULT_SPLIT_DIR) -> pd.DataFrame:
     """Load the frozen test split. Callable only through the harness module."""
     return load_split("test", token=HarnessToken(), split_dir=split_dir)
+
+
+def reason_on_test(**kwargs) -> dict:
+    """Run reasoner batch inference over the test split. This is the sole
+    entry point for test-split inference; the batch runner refuses the
+    test split unless the frame arrives from here."""
+    from provenance_lens.reasoner.batch import run_split
+
+    return run_split("test", frame=load_test_split(), **kwargs)

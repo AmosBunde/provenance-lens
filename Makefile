@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help setup lint test data features eda baseline-smoke
+.PHONY: help setup lint test data features eda baseline-smoke reason
 
 help: ## List the available targets
 	@grep -E "^[a-z-]+:.*##" $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*##"}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -22,6 +22,9 @@ eda: ## Execute the EDA notebook headlessly into docs/report/eda/
 
 baseline-smoke: ## CPU smoke run of the full baseline path (tiny subset)
 	python3 -m provenance_lens.baseline.train --smoke
+
+reason: ## Run the reasoner over the validation split (test only via harness)
+	python3 -m provenance_lens.reasoner.batch val
 
 lint: ## Run ruff and black in check mode
 	ruff check src tests
