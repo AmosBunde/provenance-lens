@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help setup lint test data features eda baseline-smoke reason eval
+.PHONY: help setup lint test data features eda baseline-smoke reason eval demo
 
 help: ## List the available targets
 	@grep -E "^[a-z-]+:.*##" $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*##"}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -28,6 +28,10 @@ reason: ## Run the reasoner over the validation split (test only via harness)
 
 eval: ## Score all tracks, calibrate, and generate docs/report/
 	python3 -m provenance_lens.eval.report
+
+PORT ?= 8000
+demo: ## Serve the single-asset verdict endpoint and page (PORT=8000)
+	uvicorn provenance_lens.demo.app:app --host 0.0.0.0 --port $(PORT)
 
 lint: ## Run ruff and black in check mode
 	ruff check src tests

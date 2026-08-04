@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Provenance Lens</title>
+<style>
+  body { font-family: ui-monospace, Menlo, Consolas, monospace; background: #0d1117;
+         color: #c9d1d9; max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { color: #e6edf3; font-size: 1.3rem; }
+  #drop { border: 2px dashed #30363d; border-radius: 10px; padding: 2.5rem;
+          text-align: center; cursor: pointer; }
+  #drop.busy { opacity: 0.5; }
+  #result { margin-top: 1.5rem; display: none; }
+  .verdict { font-size: 1.4rem; font-weight: 700; }
+  .authentic { color: #3fb950; } .manipulated { color: #f85149; }
+  .wrap { position: relative; display: inline-block; margin-top: 1rem; }
+  .wrap img { max-width: 100%; display: block; }
+  .cell { position: absolute; border: 2px solid transparent; box-sizing: border-box; }
+  .cell.cited { border-color: #f85149; background: rgba(248, 81, 73, 0.18); }
+  table { border-collapse: collapse; margin-top: 1rem; width: 100%; }
+  td, th { border: 1px solid #30363d; padding: 0.35rem 0.6rem; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<h1>Provenance Lens: single-asset verdict</h1>
+<div id="drop">Click or drop an image to analyze</div>
+<input id="file" type="file" accept="image/*" hidden/>
+<div id="result">
+  <div class="verdict" id="label"></div>
+  <div id="confidence"></div>
+  <div class="wrap" id="wrap"><img id="preview" alt="uploaded image"/></div>
+  <table id="evidence"><thead>
+    <tr><th>signal</th><th>region</th><th>direction</th></tr>
+  </thead><tbody></tbody></table>
+</div>
+<script>
+const drop = document.getElementById("drop");
+const input = document.getElementById("file");
+drop.onclick = () => input.click();
+drop.ondragover = (e) => e.preventDefault();
+drop.ondrop = (e) => { e.preventDefault(); analyze(e.dataTransfer.files[0]); };
+input.onchange = () => analyze(input.files[0]);
+
+async function analyze(file) {
+  if (!file) return;
+  drop.classList.add("busy");
+  const body = new FormData();
+  body.append("file", file);
+  const response = await fetch("/verdict", { method: "POST", body });
+  const data = await response.json();
+  drop.classList.remove("busy");
+  render(file, data);
+}
+
+function render(file, data) {
+  const result = document.getElementById("result");
+  result.style.display = "block";
+  const label = document.getElementById("label");
+  if (data.ok) {
+    label.textContent = data.label.toUpperCase();
+    label.className = "verdict " + data.label;
+    document.getElementById("confidence").textContent =
+      "confidence " + data.confidence.toFixed(2) +
+      " · grounding rate " + data.grounding_rate.toFixed(2);
+  } else {
+    label.textContent = "PARSE FAILURE: " + data.failure;
+    label.className = "verdict manipulated";
+    document.getElementById("confidence").textContent = "";
+  }
+  const preview = document.getElementById("preview");
+  preview.src = URL.createObjectURL(file);
+  preview.onload = () => grid(data);
+  const tbody = document.querySelector("#evidence tbody");
+  tbody.innerHTML = "";
+  for (const e of data.evidence) {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${e.signal}</td><td>${e.region}</td><td>${e.direction}</td>`;
+    tbody.appendChild(row);
+  }
+}
+
+function grid(data) {
+  const wrap = document.getElementById("wrap");
+  wrap.querySelectorAll(".cell").forEach((c) => c.remove());
+  const cited = new Set(data.evidence.map((e) => e.region));
+  const img = document.getElementById("preview");
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+    const cell = document.createElement("div");
+    cell.className = "cell" + (cited.has(`r${r}c${c}`) ? " cited" : "");
+    cell.style.left = (c * 100 / 3) + "%";
+    cell.style.top = (r * 100 / 3) + "%";
+    cell.style.width = (100 / 3) + "%";
+    cell.style.height = (100 / 3) + "%";
+    wrap.appendChild(cell);
+  }
+}
+</script>
+</body>
+</html>
