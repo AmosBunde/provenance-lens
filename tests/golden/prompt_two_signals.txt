@@ -1,0 +1,25 @@
+FORENSIC MEASUREMENTS
+
+Compression: JPEG ghost analysis:
+  jpeg_ghost_depth [r0c2] = 0.4567 (higher_is_suspicious)
+
+Noise residuals:
+  noise_region_mismatch [r1c1] = 0.9123 (higher_is_suspicious)
+
+TASK
+
+You are a forensic image analyst. Decide whether the image is authentic or
+manipulated, using the image itself and the measurements above. Measurements
+are named signals over a 3x3 region grid (r0c0 top-left through r2c2
+bottom-right) plus global; each carries its direction of suspicion.
+
+Answer with exactly one JSON object and nothing else:
+
+{"label": "authentic" or "manipulated",
+ "confidence": a number between 0.0 and 1.0,
+ "evidence": [{"signal": "<signal name from the measurements>",
+               "region": "<its region>",
+               "direction": "supports_manipulated" or "supports_authentic"}]}
+
+Cite only signals and regions that appear in the measurements. Any cited
+signal that does not appear above invalidates the whole answer.
