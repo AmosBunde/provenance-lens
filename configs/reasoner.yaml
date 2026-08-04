@@ -1,0 +1,15 @@
+# Reasoner backend selection and decoding parameters.
+# backend: anthropic | local | mock
+backend: mock
+
+anthropic:
+  model: claude-sonnet-5
+  max_tokens: 1024
+  temperature: 0.0
+
+local:
+  model_id: Qwen/Qwen2-VL-7B-Instruct
+
+mock:
+  replies:
+    - '{"label": "manipulated", "confidence": 0.8, "evidence": []}'
