@@ -21,6 +21,8 @@ dependencies = [
     "torch>=2.3",
     "torchvision>=0.18",
     "anthropic>=0.40",
+    "imageio>=2.34",
+    "imageio-ffmpeg>=0.4",
 ]
 
 [project.optional-dependencies]
