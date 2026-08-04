@@ -1,0 +1,101 @@
+{
+  "note": "Manipulation types are nested in sources (ai_generated only in cifake, copy_move only in MICC); per-type performance is inseparable from per-source performance in this corpus.",
+  "types": {
+    "ai_generated": {
+      "accuracy": {
+        "value": 0.9569736253911488,
+        "ci_low": 0.9527268663388466,
+        "ci_high": 0.9614438980777827
+      },
+      "precision": {
+        "value": 1.0,
+        "ci_low": 1.0,
+        "ci_high": 1.0
+      },
+      "recall": {
+        "value": 0.9569736253911488,
+        "ci_low": 0.9527268663388466,
+        "ci_high": 0.9614438980777827
+      },
+      "macro_f1": {
+        "value": 0.489006909942322,
+        "ci_low": 0.48789561037028556,
+        "ci_high": 0.49017150019941885
+      },
+      "auroc": {
+        "value": NaN,
+        "ci_low": NaN,
+        "ci_high": NaN
+      },
+      "parse_failure_rate": 0.0,
+      "failure_taxonomy": {},
+      "n": 8948
+    },
+    "copy_move": {
+      "accuracy": {
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0
+      },
+      "precision": {
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0
+      },
+      "recall": {
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0
+      },
+      "macro_f1": {
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0
+      },
+      "auroc": {
+        "value": NaN,
+        "ci_low": NaN,
+        "ci_high": NaN
+      },
+      "parse_failure_rate": 0.0,
+      "failure_taxonomy": {},
+      "n": 109
+    },
+    "none": {
+      "accuracy": {
+        "value": 0.9640751862974085,
+        "ci_low": 0.9600711822934045,
+        "ci_high": 0.9677455233010789
+      },
+      "precision": {
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0
+      },
+      "recall": {
+        "value": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0
+      },
+      "macro_f1": {
+        "value": 0.49085452177359984,
+        "ci_low": 0.48981444702945015,
+        "ci_high": 0.4918042052905268
+      },
+      "auroc": {
+        "value": NaN,
+        "ci_low": NaN,
+        "ci_high": NaN
+      },
+      "parse_failure_rate": 0.0,
+      "failure_taxonomy": {},
+      "n": 8991
+    }
+  },
+  "confusion": {
+    "true_authentic_pred_authentic": 8668,
+    "true_authentic_pred_manipulated": 323,
+    "true_manipulated_pred_authentic": 494,
+    "true_manipulated_pred_manipulated": 8563
+  }
+}
