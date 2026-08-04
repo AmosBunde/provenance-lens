@@ -30,8 +30,9 @@ eval: ## Score all tracks, calibrate, and generate docs/report/
 	python3 -m provenance_lens.eval.report
 
 PORT ?= 8000
-demo: ## Serve the single-asset verdict endpoint and page (PORT=8000)
-	uvicorn provenance_lens.demo.app:app --host 0.0.0.0 --port $(PORT)
+HOST ?= 127.0.0.1
+demo: ## Serve the verdict endpoint and page (HOST=127.0.0.1 PORT=8000)
+	uvicorn provenance_lens.demo.app:app --host $(HOST) --port $(PORT)
 
 lint: ## Run ruff and black in check mode
 	ruff check src tests

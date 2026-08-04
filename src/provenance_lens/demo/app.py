@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import hashlib
 import io
+import shutil
 import tempfile
 from pathlib import Path
 from typing import Annotated
@@ -30,6 +31,7 @@ from provenance_lens.reasoner.client import load_backend
 from provenance_lens.reasoner.grounding import reason_about
 
 app = FastAPI(title="Provenance Lens")
+MAX_UPLOAD_BYTES = 25 * 1024 * 1024  # refuse larger bodies before decode
 _EXTRACTORS = {
     "compression_ghosts": compression_ghosts.extract,
     "blocking_grid": blocking_grid.extract,
@@ -55,22 +57,27 @@ def _ephemeral_store(sha: str, image: Image.Image) -> Path:
 
 @app.post("/verdict")
 async def verdict(file: Annotated[UploadFile, File()]) -> JSONResponse:
-    payload = await file.read()
+    payload = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(payload) > MAX_UPLOAD_BYTES:
+        return JSONResponse({"error": f"upload exceeds {MAX_UPLOAD_BYTES} bytes"}, status_code=413)
     sha = hashlib.sha256(payload).hexdigest()
     image = Image.open(io.BytesIO(payload))
     image.load()
     feature_dir = _ephemeral_store(sha, image)
-    backend = load_backend()
-    result = reason_about(sha, image, backend, feature_dir)
-    body = {
-        "sha256": sha,
-        "ok": result.ok,
-        "label": result.verdict.label if result.ok else None,
-        "confidence": result.verdict.confidence if result.ok else None,
-        "evidence": [e.__dict__ for e in result.verdict.evidence] if result.ok else [],
-        "failure": str(result.parse.failure) if result.parse.failure else None,
-        "grounding_rate": result.grounding_rate,
-    }
+    try:
+        backend = load_backend()
+        result = reason_about(sha, image, backend, feature_dir)
+        body = {
+            "sha256": sha,
+            "ok": result.ok,
+            "label": result.verdict.label if result.ok else None,
+            "confidence": result.verdict.confidence if result.ok else None,
+            "evidence": ([e.__dict__ for e in result.verdict.evidence] if result.ok else []),
+            "failure": str(result.parse.failure) if result.parse.failure else None,
+            "grounding_rate": result.grounding_rate,
+        }
+    finally:
+        shutil.rmtree(feature_dir, ignore_errors=True)
     return JSONResponse(body)
 
 

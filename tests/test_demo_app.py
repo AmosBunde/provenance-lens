@@ -61,3 +61,22 @@ def test_index_serves_page(client):
     assert response.status_code == 200
     assert "Provenance Lens" in response.text
     assert "drop an image" in response.text
+
+
+def test_oversized_upload_is_refused(client):
+    from provenance_lens.demo.app import MAX_UPLOAD_BYTES
+
+    blob = b"x" * (MAX_UPLOAD_BYTES + 10)
+    response = client.post("/verdict", files={"file": ("big.png", blob, "image/png")})
+    assert response.status_code == 413
+    assert "exceeds" in response.json()["error"]
+
+
+def test_ephemeral_store_is_cleaned_up(client, tmp_path, monkeypatch):
+    import glob
+    import tempfile as _tempfile
+
+    monkeypatch.setattr(_tempfile, "tempdir", str(tmp_path))
+    response = client.post("/verdict", files={"file": ("upload.png", _upload_bytes(), "image/png")})
+    assert response.status_code == 200
+    assert glob.glob(str(tmp_path / "pl-demo-*")) == []
