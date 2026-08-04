@@ -18,6 +18,8 @@ dependencies = [
     "imagehash>=4.3",
     "scipy>=1.11",
     "matplotlib>=3.8",
+    "torch>=2.3",
+    "torchvision>=0.18",
 ]
 
 [project.optional-dependencies]
