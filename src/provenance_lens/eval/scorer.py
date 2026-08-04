@@ -76,6 +76,11 @@ def bootstrap_metrics(labels: np.ndarray, track: Track) -> dict:
     for key, value in point.items():
         arr = np.asarray(samples[key], dtype=float)
         arr = arr[~np.isnan(arr)]
+        if len(arr) == 0:
+            # single-class slices make AUROC undefined in every resample;
+            # report nan bounds rather than crash or invent an interval
+            out[key] = {"value": value, "ci_low": float("nan"), "ci_high": float("nan")}
+            continue
         out[key] = {
             "value": value,
             "ci_low": float(np.percentile(arr, 2.5)),
