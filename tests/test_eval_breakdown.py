@@ -52,6 +52,11 @@ def test_small_stratum_interval_is_wide():
     predictions = labels.copy()
     flip = rng.random(400) < 0.15
     predictions[flip] = 1 - predictions[flip]
+    # guarantee comparable error rates inside the small stratum so the
+    # width difference reflects sample size, not luck of the flip mask
+    predictions[385] = 1 - labels[385]
+    predictions[392] = 1 - labels[392]
+    predictions[399] = 1 - labels[399]
     types = pd.Series(["none"] * 380 + ["copy_move"] * 20)
     out = per_type_metrics(labels, types, _track(predictions))
     wide = out["types"]["copy_move"]["accuracy"]
