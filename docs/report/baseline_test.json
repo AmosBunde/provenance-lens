@@ -1,0 +1,17 @@
+{
+  "scored_at": "2026-08-04T00:44:07+00:00",
+  "checkpoint_sha256": "1cebb1f4d0733449a3fe884eebb53f114904a00866bb8b76b9666d51a63a6001",
+  "winning_config": {
+    "learning_rate": 0.0003,
+    "run": "sweep-1785803212-lr0.0003",
+    "epoch": 13,
+    "train_loss": 0.012973270078401142,
+    "val_accuracy": 0.9543968526624924,
+    "val_macro_f1": 0.9543967092833091
+  },
+  "test_assets": 18048,
+  "accuracy": 0.9547318262411347,
+  "macro_f1": 0.9547302939965061,
+  "auroc": 0.9853809497547307,
+  "protocol_note": "The test set is now closed to the baseline. This record is the number to beat; any further baseline evaluation on test would violate protocol."
+}
