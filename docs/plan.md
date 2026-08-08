@@ -4,7 +4,7 @@ One issue equals one branch equals one pull request. Every pull request targets 
 
 Branch convention: `<type>/<issue>-<slug>` with types `chore`, `feat`, `exp`, `fix`. Pull request bodies follow CONTRIBUTING.md; experiment pull requests lead with the measured result.
 
-Total: 29 planned issues, branches, and pull requests across 6 milestones.
+Total: 29 planned issues, branches, and pull requests across 6 milestones. Status: all rows merged; the only open follow-up is real reasoner inference, which is credential-gated and documented in the README results section.
 
 ## M0: Scaffold (complete)
 
