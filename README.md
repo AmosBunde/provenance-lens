@@ -156,16 +156,43 @@ The parser is strict: anything that is not a single schema-conforming JSON objec
 
 `make demo` starts a FastAPI service exposing `POST /verdict` (multipart image upload, returns the reasoner JSON with evidence) and a single page that renders the verdict and highlights the cited regions. It runs on CPU with the API backend.
 
-## Roadmap
+## Results
 
-| Milestone | Deliverable | Gate |
-|---|---|---|
-| **M0 Scaffold** | Package skeleton, `pyproject.toml`, Makefile, pre-commit (ruff, black), pytest in CI, both Dockerfiles building | CI green across the scaffold |
-| **M1 Data and EDA** | Manifest builder, scene-aware frozen splits with committed test hash, leakage-impossibility test, EDA notebook | Written findings: which signals plausibly separate the classes, which correlations are dataset artifacts |
-| **M2 Forensics** | All four signal families into the feature store | `make features` idempotent; extractor tests on synthetic fixtures |
-| **M3 Baseline** | Tuned baseline, sweep logged, best checkpoint frozen | Single recorded test score; `make baseline-smoke` passes on CPU |
-| **M4 Reasoner** | Prompt template, strict JSON contract, parser, grounding check wired into scoring | Evidence grounding enforced in scoring; both backends behind one interface |
-| **M5 Eval, calibration, video** | Scorer with bootstrap CIs and per-type breakdown, calibration, video path, report generator | `docs/report/` reproducible; negative results included |
+All six milestones are complete (28 issues, 30 merged pull requests, every one through a linked branch with green CI). The frozen benchmark stands at:
+
+| measurement | value |
+|---|---|
+| Baseline test macro F1 | 0.9547 [0.9517, 0.9579] |
+| Baseline test AUROC | 0.9854 [0.9837, 0.9872] |
+| Baseline copy_move recall | **0.00** (109 test assets) |
+| Test ECE, before and after temperature scaling | 0.0344 to 0.0024 (temperature 2.904, fitted on validation) |
+| Validation-to-test gap at freeze | +0.0003 |
+
+The headline is the negative result: the tuned baseline labels essentially every copy-moved image authentic, so its strong aggregate is a cifake separability number rather than manipulation detection in general. Full tables, per-type intervals, reliability diagrams, and written findings live in [`docs/report/`](docs/report/README.md), regenerated end to end by `make eval`.
+
+### The one remaining step: the reasoner comparison
+
+Every layer of the reasoner is merged and mock-validated (backend interface, golden-pinned prompt, strict parser, grounding gate, resumable cost-accounted batch runner), but no real model call has been made because API credentials were not available during development. With a key, the comparison runs in three commands:
+
+```bash
+export ANTHROPIC_API_KEY=...          # then set backend: anthropic in configs/reasoner.yaml
+make reason                            # validation split, resumable, cost-logged
+python3 -c "from provenance_lens.eval.harness import reason_on_test; reason_on_test()"
+make eval                              # regenerates docs/report/ with the paired comparison
+```
+
+Measured cost basis: roughly 2,000 prompt tokens plus a compressed image per asset, about 0.011 USD per asset at claude-sonnet-5 rates (about 200 USD per full 18,000-asset split; a stratified subsample or claude-haiku-4-5 reduce this). The report generator automatically adds the paired bootstrap delta, grounding rate, and per-type comparison the moment `data/verdicts/test.jsonl` exists; given the baseline's copy_move failure, that slice is where grounded regional evidence has its real opportunity.
+
+## Roadmap (complete)
+
+| Milestone | Outcome |
+|---|---|
+| **M0 Scaffold** | Package, Makefile, pre-commit, CI, both docker images; all green |
+| **M1 Data and EDA** | 120,309-asset manifest, frozen splits (test hash committed), leakage guard enforced in code, EDA findings: residual energy separates within source, file size is a shortcut, quality factor is a source fingerprint |
+| **M2 Forensics** | Four extractor families, 16.1 M store rows, 134 signals per asset |
+| **M3 Baseline** | Tuned (flat sweep grid, representation-limited), frozen by hash, scored on test exactly once |
+| **M4 Reasoner** | Full chain merged and mock-validated; real inference credential-gated as above |
+| **M5 Eval, calibration, video** | Scorer with paired bootstrap, calibration with validation-only fitting, video sampling and temporal aggregation, report generator, hardened demo |
 
 ## Contributing
 
